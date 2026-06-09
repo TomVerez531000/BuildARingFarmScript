@@ -732,7 +732,7 @@ UpgradeStatus = UpgradeSeedSection:AddParagraph({
 	Title = "Uprading Status",
 	Content = "<font color=\"rgb(0,170,0)\">Ready</font>"
 })
-local label = AutoSellLogs.DescLabel
+local label = UpgradeStatus.DescLabel
 label.RichText = true
 
 
