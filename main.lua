@@ -625,7 +625,7 @@ FloorToPlantSelector:OnChanged(function(Value)
 	FloorToPlant = Value
 end)
 
-HarvestFloorSection:AddButton({
+PlantSeedSection:AddButton({
 	Title = "Plant",
 	Description = "Plant the selected seeds into the selected floor",
 	Callback = function()
@@ -637,9 +637,11 @@ HarvestFloorSection:AddButton({
 			
 			game.ReplicatedStorage.Remotes.EquipTool:FireServer(seed)
 			repeat task.wait() until seed.Parent ~= game.Players.LocalPlayer.Backpack
+			print("test")
 			
 			game.ReplicatedStorage.Remotes.PlantSeed:FireServer(plot.Dirt)
 			repeat task.wait() until seed == nil or (seed.Parent ~= game.Players.LocalPlayer.Backpack and seed.Parent ~= game.Players.LocalPlayer.Character)
+			print("test2")
 		end
 	end
 })
