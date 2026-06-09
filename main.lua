@@ -402,6 +402,40 @@ local function get_plot_tools()
 		return slots
 	end
 
+	function PlotTools.GetFloorUsedSlots(Floor)
+		local plot = PlotTools.GetPlot(game.Players.LocalPlayer)
+		if not plot then return end
+		local farmPlot = PlotTools.GetFloor(Floor)
+		if not farmPlot then return end
+
+		local slots = {}
+
+		for _,slot in pairs(farmPlot:GetChildren()) do
+			if slot:GetAttribute("PlotKey") == nil then continue end
+			if slot.Dirt:GetAttribute("PlantName") == nil then continue end
+
+			table.insert(slots, slot)
+		end
+
+		return slots
+	end
+
+	function PlotTools.UpgradePlantsToLevel(Floor, Level)
+		local usedslots = PlotTools.GetFloorUsedSlots(Floor)
+
+		for _,slot in pairs(usedslots) do
+			local level = slot.Dirt:GetAttribute("PlantLevel")
+			if level >= Level then continue end
+
+			local difference = Level - level
+			task.spawn(function()
+				for i = 1,difference do
+					game.ReplicatedStorage.Remotes.UpgradePlant:InvokeServer(slot.Dirt)
+				end
+			end)
+		end
+	end
+
 	return PlotTools
 end
 
@@ -637,13 +671,56 @@ PlantSeedSection:AddButton({
 			
 			game.ReplicatedStorage.Remotes.EquipTool:FireServer(seed)
 			repeat task.wait() until seed.Parent ~= game.Players.LocalPlayer.Backpack
-			print(1)
 			
 			local name = seed.Name
 			game.ReplicatedStorage.Remotes.PlantSeed:FireServer(plot.Dirt)
-			repeat task.wait() until seed == nil or seed.Name ~= name or (seed.Parent ~= game.Players.LocalPlayer.Backpack and seed.Parent ~= game.Players.LocalPlayer.Character)
-			print(2)
+			local wait_start = os.clock()
+			while task.wait() do
+				if seed == nil or seed.Name ~= name or (seed.Parent ~= game.Players.LocalPlayer.Backpack and seed.Parent ~= game.Players.LocalPlayer.Character) then break end
+				
+				if wait_start + 0.5 < os.clock() then
+					game.ReplicatedStorage.Remotes.EquipTool:FireServer(seed)
+					wait_start = os.clock()
+				end
+			end
 		end
+	end
+})
+
+
+local UpgradeSeedSection = UtilityTab:AddSection("Upgrade all seeds")
+
+local plantlevel = 2
+local PlantLevelSlider = UpgradeSeedSection:AddSlider("PlantLevelSlider", {
+	Title = "Level",
+	Description = "Choose the level to upgrade all seeds",
+	Default = 2,
+	Min = 2,
+	Max = 100,
+	Rounding = 0,
+	Callback = function(Value)
+		plantlevel = Value
+	end
+})
+
+local FloorToUpgrade = 1
+local FloorToUpgradeSelector = UpgradeSeedSection:AddDropdown("FloorToUpgradeSelector", {
+	Title = "Floor",
+	Description = "You can select on wich floor to upgrade",
+	Values = floor_list,
+	Multi = false,
+	Default = 1,
+})
+
+FloorToUpgradeSelector:OnChanged(function(Value)
+	FloorToUpgrade = Value
+end)
+
+UpgradeSeedSection:AddButton({
+	Title = "Upgrade",
+	Description = "Upgrade all plants of selected floors until selected level",
+	Callback = function()
+		plot_tools.UpgradePlantsToLevel(FloorToUpgrade, plantlevel)
 	end
 })
 
