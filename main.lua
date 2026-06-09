@@ -324,21 +324,13 @@ local function get_plot_tools()
 	function PlotTools.HarvestAllPlants(Floor)
 		local plot = PlotTools.GetPlot(game.Players.LocalPlayer)
 		if not plot then return end
-
-		local farmPlot
-		if Floor == 1 then
-			farmPlot = plot.FarmPlot
-		else
-			local floor = plot:FindFirstChild("Floor"..tostring(Floor))
-			if not floor then return end
-			farmPlot = floor.FarmPlot
-		end
-
+		local farmPlot = PlotTools.GetFloor(Floor)
 		if not farmPlot then return end
 
 		for _,plant in pairs(farmPlot:GetChildren()) do
 			if plant:GetAttribute("PlotKey") == nil then continue end
 			game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("RemovePlant"):FireServer(plant.Dirt)
+			task.wait(0.1)
 		end
 	end
 
