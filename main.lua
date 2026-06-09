@@ -526,8 +526,8 @@ label.RichText = true
 
 local function format_money(amount)
 	local suffix = {"K", "M", "B", "T", "Qd", "Qn"}
-	local k = math.floor((#tostring(amount)-1)/3)
-	local reaming = #tostring(amount)-(k*3)
+	local k = math.floor(((#tostring(amount))-1)/3)
+	local reaming = (#tostring(amount))-(k*3)
 	local before = string.sub(tostring(amount), 0, reaming)
 
 	return before..suffix[k]
@@ -580,13 +580,13 @@ end
 local HarvestFloorSection = UtilityTab:AddSection("Harvest Floor Plants")
 
 local HarvestingFloors = {}
---local FloorHarvestSelector = HarvestFloorSection:AddDropdown("FloorHarvestSelector", {
---	Title = "Floors",
---	Description = "You can select on wich floor to harvest",
---	Values = floor_list,
---	Multi = true,
---	Default = {},
---})
+local FloorHarvestSelector = HarvestFloorSection:AddDropdown("FloorHarvestSelector", {
+	Title = "Floors",
+	Description = "You can select on wich floor to harvest",
+	Values = floor_list,
+	Multi = true,
+	Default = {},
+})
 
 FloorHarvestSelector:OnChanged(function(Value)
 	local Values = {}
