@@ -428,11 +428,10 @@ local function get_plot_tools()
 			if level >= Level then continue end
 
 			local difference = Level - level
-			task.spawn(function()
-				for i = 1,difference do
-					game.ReplicatedStorage.Remotes.UpgradePlant:InvokeServer(slot.Dirt)
-				end
-			end)
+			for i = 1,difference do
+				game.ReplicatedStorage.Remotes.UpgradePlant:InvokeServer(slot.Dirt)
+				task.wait(0.1)
+			end
 		end
 	end
 
