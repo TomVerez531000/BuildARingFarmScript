@@ -624,7 +624,7 @@ local FloorToPlant = 1
 local FloorToPlantSelector = PlantSeedSection:AddDropdown("FloorToPlantSelector", {
 	Title = "Floor",
 	Description = "You can select on wich floor to harvest",
-	Values = floors,
+	Values = floor_list,
 	Multi = false,
 	Default = 1,
 })
