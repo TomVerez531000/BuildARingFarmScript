@@ -716,13 +716,24 @@ FloorToUpgradeSelector:OnChanged(function(Value)
 	FloorToUpgrade = Value
 end)
 
+local UpgradeStatus
+
 UpgradeSeedSection:AddButton({
 	Title = "Upgrade",
 	Description = "Upgrade all plants of selected floors until selected level",
 	Callback = function()
+		UpgradeStatus:SetDesc("<font color=\"rgb(0,128,255)\">Upgrading</font>")
 		plot_tools.UpgradePlantsToLevel(FloorToUpgrade, plantlevel)
+		UpgradeStatus:SetDesc("<font color=\"rgb(0,170,0)\">Ready</font>")
 	end
 })
+
+UpgradeStatus = UpgradeSeedSection:AddParagraph({
+	Title = "Uprading Status",
+	Content = "<font color=\"rgb(0,170,0)\">Ready</font>"
+})
+local label = AutoSellLogs.DescLabel
+label.RichText = true
 
 
 AntiAfkTab = Window:AddTab({ Title = "AFK", Icon = "" })
