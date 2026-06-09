@@ -614,7 +614,7 @@ local AmountPlantSlider = PlantSeedSection:AddSlider("AmountPlantSlider", {
 	Default = 1,
 	Min = 1,
 	Max = 30,
-	Rounding = 1,
+	Rounding = 0,
 	Callback = function(Value)
 		SeedsToPlant = Value
 	end
