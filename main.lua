@@ -637,11 +637,12 @@ PlantSeedSection:AddButton({
 			
 			game.ReplicatedStorage.Remotes.EquipTool:FireServer(seed)
 			repeat task.wait() until seed.Parent ~= game.Players.LocalPlayer.Backpack
-			print("test")
+			print(1)
 			
+			local name = seed.Name
 			game.ReplicatedStorage.Remotes.PlantSeed:FireServer(plot.Dirt)
-			repeat task.wait() until seed == nil or (seed.Parent ~= game.Players.LocalPlayer.Backpack and seed.Parent ~= game.Players.LocalPlayer.Character)
-			print("test2")
+			repeat task.wait() until seed == nil or seed.Name ~= name or (seed.Parent ~= game.Players.LocalPlayer.Backpack and seed.Parent ~= game.Players.LocalPlayer.Character)
+			print(2)
 		end
 	end
 })
