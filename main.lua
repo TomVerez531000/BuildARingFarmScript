@@ -780,7 +780,11 @@ local PetRarityFilterDropdown = PetSellSection:AddDropdown("PetRarityFilterDropd
 })
 
 PetRarityFilterDropdown:OnChanged(function(Value)
-	PetSellRarityFilter = Value
+	local Values = {}
+	for Value, State in next, Value do
+		table.insert(Values, Value)
+	end
+	PetSellRarityFilter = Values
 end)
 
 PetSellSection:AddButton({
