@@ -768,8 +768,9 @@ PlantSeedSection:AddButton({
 		local bestSeeds = plot_tools.GetSeeds(true)
 		local bestPlots = plot_tools.GetFloorEmptySlots(FloorToPlant, true)
 		
+		local current_seed_index = 1
 		for i,plot in pairs(bestPlots) do
-			local seed = bestSeeds[i]
+			local seed = bestSeeds[current_seed_index]
 			
 			game.ReplicatedStorage.Remotes.EquipTool:FireServer(seed)
 			repeat task.wait() until seed.Parent ~= game.Players.LocalPlayer.Backpack
@@ -784,6 +785,10 @@ PlantSeedSection:AddButton({
 					game.ReplicatedStorage.Remotes.EquipTool:FireServer(seed)
 					wait_start = os.clock()
 				end
+			end
+			
+			if seed == nil or (seed.Parent ~= game.Players.LocalPlayer.Backpack and seed.Parent ~= game.Players.LocalPlayer.Character) then
+				current_seed_index += 1
 			end
 		end
 	end
