@@ -613,13 +613,17 @@ autoegg.BoughtEggSignal:Connect(function(egg)
 		pet_labels[pet].Label.LayoutOrder = rarity_dt.Order
 		local gradient = rarity_dt.Gradient:Clone()
 		gradient.Parent = pet_labels[pet].Label
+		local stroke = Instance.new("UIStroke", pet_labels[pet].Label)
+		stroke.Color = Color3.fromRGB(0, 0, 0)
+		stroke.Thickness = 1
+		stroke.Transparency = 0
 	end
 	pet_labels[pet].Amount += 1
 	local sizes_amount = pet_labels[pet].Sizes[sizestr] or 0
 	sizes_amount += 1
 	pet_labels[pet].Sizes[sizestr] = sizes_amount
 	
-	local final_text = pet.." ["..rarity.."] ["
+	local final_text = "(x"..tostring(pet_labels[pet].Amount)..") "..pet.." ["..rarity.."] ["
 	for size,amount in pairs(pet_labels[pet].Sizes) do
 		final_text = final_text..size.."(x"..tostring(amount).."), "
 	end
