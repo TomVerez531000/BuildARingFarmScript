@@ -773,8 +773,8 @@ local PetRarityFilterDropdown = PetSellSection:AddDropdown("PetRarityFilterDropd
 	Title = "Rarity filter",
 	Description = "You can select wich pet rarities to sell",
 	Values = pet_rarities,
-	Multi = false,
-	Default = 1,
+	Multi = true,
+	Default = {},
 })
 
 PetRarityFilterDropdown:OnChanged(function(Value)
