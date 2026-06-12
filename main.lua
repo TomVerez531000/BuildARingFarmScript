@@ -1,7 +1,7 @@
 local plants_data = require(game.ReplicatedStorage.Shared.Registry.Plants)
 local pets_data = require(game.ReplicatedStorage.Shared.Registry.Pets)
 local rarity_data = require(game.ReplicatedStorage.Shared.Registry.Rarities)
-local gears_data = require(game.ReplicatedStorage.Shared.Registry.Gear)
+local _,gears_data = require(game.ReplicatedStorage.Shared.Registry.Gear)
 
 local function get_autoegg()
 	local AutoEgg = {}
