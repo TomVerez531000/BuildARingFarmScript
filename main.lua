@@ -591,10 +591,11 @@ local AutoEggLogs = LogsTab:AddParagraph({
 	Title = "Auto egg",
 	Content = ""
 })
-local label = AutoEggLogs.DescLabel
-label.RichText = true
+local AutoEggLogsLabel = AutoEggLogs.DescLabel
+AutoEggLogsLabel.RichText = true
+AutoEggLogsLabel.Visible = false
 
-local egg_stats = {}
+local pet_labels = {}
 autoegg.BoughtEggSignal:Connect(function(egg)
 	local pet = egg[2]
 	local sizestr = egg[6]
@@ -603,18 +604,27 @@ autoegg.BoughtEggSignal:Connect(function(egg)
 	local pet_data = pets_data[pet]
 	local rarity = pet_data.Rarity
 	
-	if not egg_stats[pet] then
-		egg_stats[pet] = {}
+	if not pet_labels[pet] then
+		pet_labels[pet] = {["Label"]=AutoEggLogsLabel:Clone(), ["Amount"]=0, ["Sizes"]={}}
+		pet_labels[pet].Label.Parent = AutoEggLogsLabel.Parent
+		pet_labels[pet].Label.Visible = true
+		
+		local rarity_dt = rarity_data[rarity]
+		pet_labels[pet].Label.LayoutOrder = rarity_dt.Order
+		local gradient = rarity_dt.Gradient:Clone()
+		gradient.Parent = pet_labels[pet].Label
 	end
-	table.insert(egg_stats[pet], {sizestr, size, rarity})
+	pet_labels[pet].Amount += 1
+	local sizes_amount = pet_labels[pet].Sizes[sizestr] or 0
+	sizes_amount += 1
+	pet_labels[pet].Sizes[sizestr] = sizes_amount
 	
-	local text = ""
-	for pet,list in pairs(egg_stats) do
-		for i,stats in pairs(list) do
-			text = text.."<font color=\"rgb(255,255,255)\">"..pet..": "..stats[1].."("..stats[2]..")".." ["..stats[3].."]</font><br/>"
-		end
+	local final_text = pet.." ["..rarity.."] ["
+	for size,amount in pairs(pet_labels[pet].Sizes) do
+		final_text = final_text..size.."(x"..tostring(amount).."), "
 	end
-	AutoEggLogs:SetDesc(text)
+	final_text = final_text:sub(1, -3).."]"
+	pet_labels[pet].Label.Text = final_text
 end)
 
 
