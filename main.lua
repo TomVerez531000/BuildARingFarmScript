@@ -571,7 +571,7 @@ end)
 
 local AutoRollNoAnimToggle = AutoRollSection:AddToggle("AutoRollNoAnimToggle", {Title = "Disable roll animations", Default = false })
 AutoRollNoAnimToggle:OnChanged(function()
-	autoroll.ToggleAnimations(Options.AutoRollNoAnimToggle.Value)
+	autoroll.ToggleAnimations(not Options.AutoRollNoAnimToggle.Value)
 end)
 
 
