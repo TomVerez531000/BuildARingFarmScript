@@ -1,6 +1,7 @@
 local plants_data = require(game.ReplicatedStorage.Shared.Registry.Plants)
 local pets_data = require(game.ReplicatedStorage.Shared.Registry.Pets)
 local rarity_data = require(game.ReplicatedStorage.Shared.Registry.Rarities)
+local gears_data = require(game.ReplicatedStorage.Shared.Registry.Gear)
 
 local function get_autoegg()
 	local AutoEgg = {}
@@ -662,6 +663,37 @@ autoroll.BoughtSeedSignal:Connect(function(plant, plant_data)
 	roll_labels[plant].Amount += 1
 	local final_text = "(x"..tostring(roll_labels[plant].Amount)..") "..plant.." ["..rarity.."]"
 	roll_labels[plant].Label.Text = final_text
+end)
+
+
+local AutoGearLogs = LogsTab:AddParagraph({
+	Title = "Auto gear",
+	Content = ""
+})
+local AutoGearLogsLabel = AutoGearLogs.DescLabel
+AutoGearLogsLabel.RichText = true
+AutoGearLogsLabel.Visible = false
+
+local gear_labels = {}
+autogear.BoughtGearSignal:Connect(function(gear)
+	local gear_data = gears_data[gear]
+	local cost = gear_data.Cost
+
+	if not gear_labels[gear] then
+		gear_labels[gear] = {["Label"]=AutoGearLogsLabel:Clone(), ["Amount"]=0}
+		gear_labels[gear].Label.Parent = AutoGearLogsLabel.Parent
+		gear_labels[gear].Label.Visible = true
+
+		gear_labels[gear].Label.LayoutOrder = cost
+		local stroke = Instance.new("UIStroke", gear_labels[gear].Label)
+		stroke.Color = Color3.fromRGB(0, 0, 0)
+		stroke.Thickness = 0.5
+		stroke.Transparency = 0
+	end
+
+	gear_labels[gear].Amount += 1
+	local final_text = "(x"..tostring(gear_labels[gear].Amount)..") "..gear
+	gear_labels[gear].Label.Text = final_text
 end)
 
 
