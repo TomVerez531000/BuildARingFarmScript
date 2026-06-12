@@ -490,13 +490,15 @@ local Window = Fluent:CreateWindow({
 
 AutoFarmTab = Window:AddTab({ Title = "AutoFarm", Icon = "" })
 
-local AutoSellToggle = AutoFarmTab:AddToggle("AutoSellToggle", {Title = "Auto Sell", Default = false })
+local AutoSellSection = AutoFarmTab:AddSection("Auto Sell")
+
+local AutoSellToggle = AutoSellSection:AddToggle("AutoSellToggle", {Title = "Enabled", Default = false })
 AutoSellToggle:OnChanged(function()
 	autosell.Enable(Options.AutoSellToggle.Value)
 end)
 
-local AutoSellInterval = AutoFarmTab:AddSlider("AutoSellInterval", {
-	Title = "Auto Sell Interval",
+local AutoSellInterval = AutoSellSection:AddSlider("AutoSellInterval", {
+	Title = "Interval",
 	Description = "Interval for selling",
 	Default = 5,
 	Min = 1,
@@ -507,13 +509,14 @@ local AutoSellInterval = AutoFarmTab:AddSlider("AutoSellInterval", {
 	end
 })
 
+local AutoEggSection = AutoFarmTab:AddSection("Auto Egg")
 
-local AutoEggToggle = AutoFarmTab:AddToggle("AutoEggToggle", {Title = "Auto Buy Eggs", Default = false })
+local AutoEggToggle = AutoEggSection:AddToggle("AutoEggToggle", {Title = "Enable", Default = false })
 AutoEggToggle:OnChanged(function()
 	autoegg.Enable(Options.AutoEggToggle.Value)
 end)
 
-local AutoEggSelector = AutoFarmTab:AddDropdown("AutoEggSelector", {
+local AutoEggSelector = AutoEggSection:AddDropdown("AutoEggSelector", {
 	Title = "Buying eggs",
 	Description = "You can select a filter of wich egg to autobuy",
 	Values = {"CommonEgg","RareEgg","EpicEgg"},
@@ -529,13 +532,15 @@ AutoEggSelector:OnChanged(function(Value)
 	autoegg.SetFilter(Values)
 end)
 
-local AutoGearToggle = AutoFarmTab:AddToggle("AutoGearToggle", {Title = "Auto Buy Gears", Default = false })
+local AutoGearSection = AutoFarmTab:AddSection("Auto Buy Gear")
+
+local AutoGearToggle = AutoGearSection:AddToggle("AutoGearToggle", {Title = "Enabled", Default = false })
 AutoGearToggle:OnChanged(function()
 	autogear.Enable(Options.AutoGearToggle.Value)
 end)
 
-
-local AutoRollToggle = AutoFarmTab:AddToggle("AutoRollToggle", {Title = "Auto Roll", Default = false })
+local AutoRollSection = AutoFarmTab:AddSection("Auto Roll")
+local AutoRollToggle = AutoRollSection:AddToggle("AutoRollToggle", {Title = "Enabled", Default = false })
 AutoRollToggle:OnChanged(function()
 	autoroll.Enable(Options.AutoRollToggle.Value)
 end)
@@ -548,7 +553,7 @@ for plant,data in pairs(plants_data) do
 	end
 end
 
-local AutoRollSelector = AutoFarmTab:AddDropdown("AutoRollSelector", {
+local AutoRollSelector = AutoRollSection:AddDropdown("AutoRollSelector", {
 	Title = "Rarity filter",
 	Description = "You can select a filter of wich seed to autobuy",
 	Values = plant_rarities,
