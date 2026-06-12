@@ -307,6 +307,7 @@ local function get_plot_tools()
 	local PlotTools = {}
 
 	local plants_data = require(game.ReplicatedStorage.Shared.Registry.Plants)
+	local pets_data = require(game.ReplicatedStorage.Shared.Registry.Pets)
 	local rarities_data = require(game.ReplicatedStorage.Shared.Registry.Rarities)
 
 	function PlotTools.GetPlot(player)
@@ -376,6 +377,27 @@ local function get_plot_tools()
 		end)
 
 		return seeds
+	end
+
+	function PlotTools.GetPets(rarity_filter)
+		local pets = {}
+
+		for _,tool in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+			if tool:GetAttribute("InventoryCategory") == "Pets" then
+				if rarity_filter and not table.find(rarity_filter, pets_data[tool:GetAttribute("trueName")].Rarity) then continue end
+				table.insert(pets, tool)
+			end
+		end
+
+		return pets
+	end
+
+	function PlotTools.SellAllPets(rarity_filter)
+		local pets = PlotTools.GetPets(rarity_filter)
+
+		for _,pet in pairs(pets) do
+			game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("SellPet"):InvokeServer(pet:GetAttribute("petKey"))
+		end
 	end
 
 	function PlotTools.GetFloorEmptySlots(Floor, SortByBest)
@@ -734,6 +756,38 @@ UpgradeStatus = UpgradeSeedSection:AddParagraph({
 local label = UpgradeStatus.DescLabel
 label.RichText = true
 
+
+local pet_rarities = {}
+for _,pet in pairs(pets_data) do
+	if typeof(pet) == "table" and not table.find(pet_rarities, pet.Rarity) then
+		table.insert(pet_rarities, pet.Rarity)
+	end
+end
+table.sort(pet_rarities, function(a,b)
+	return rarity_data[a].Order > rarity_data[b].Order
+end)
+
+local PetSellSection = UtilityTab:AddSection("Sell Pets")
+local PetSellRarityFilter = {}
+local PetRarityFilterDropdown = PetSellSection:AddDropdown("PetRarityFilterDropdown", {
+	Title = "Rarity filter",
+	Description = "You can select wich pet rarities to sell",
+	Values = pet_rarities,
+	Multi = false,
+	Default = 1,
+})
+
+PetRarityFilterDropdown:OnChanged(function(Value)
+	PetSellRarityFilter = Value
+end)
+
+PetSellSection:AddButton({
+	Title = "Sell all",
+	Description = "Sell all pets of selected rarities",
+	Callback = function()
+		plot_tools.SellAllPets(PetSellRarityFilter)
+	end
+})
 
 AntiAfkTab = Window:AddTab({ Title = "AFK", Icon = "" })
 
