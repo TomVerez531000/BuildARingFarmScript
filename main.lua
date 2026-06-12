@@ -1,7 +1,7 @@
 local plants_data = require(game.ReplicatedStorage.Shared.Registry.Plants)
 local pets_data = require(game.ReplicatedStorage.Shared.Registry.Pets)
 local rarity_data = require(game.ReplicatedStorage.Shared.Registry.Rarities)
-local _,gears_data = require(game.ReplicatedStorage.Shared.Registry.Gear)
+local gears_data = require(game.ReplicatedStorage.Shared.Registry.Gear)
 
 local function get_autoegg()
 	local AutoEgg = {}
@@ -676,7 +676,7 @@ AutoGearLogsLabel.Visible = false
 
 local gear_labels = {}
 autogear.BoughtGearSignal:Connect(function(gear)
-	local gear_data = gears_data[gear]
+	local gear_data = gears_data[2][gear]
 	local cost = gear_data.Cost
 
 	if not gear_labels[gear] then
