@@ -396,7 +396,9 @@ local function get_plot_tools()
 		local pets = PlotTools.GetPets(rarity_filter)
 
 		for _,pet in pairs(pets) do
-			game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("SellPet"):InvokeServer(pet:GetAttribute("petKey"))
+			task.spawn(function()
+				game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("SellPet"):InvokeServer(pet:GetAttribute("petKey"))
+			end)
 		end
 	end
 
