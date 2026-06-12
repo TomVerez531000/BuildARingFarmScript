@@ -609,10 +609,10 @@ autoegg.BoughtEggSignal:Connect(function(egg)
 	local text = ""
 	for pet,list in pairs(egg_stats) do
 		for i,stats in pairs(list) do
-			text = text.."<font color=\"rgb(255,255,255)\">"..pet..": "..stats[1].."("..stats[2]..")".." ["..stats[3].."]</font><br>"
+			text = text.."<font color=\"rgb(255,255,255)\">"..pet..": "..stats[1].."("..stats[2]..")".." ["..stats[3].."]</font><br/>"
 		end
 	end
-	AutoSellLogs:SetDesc(text)
+	AutoEggLogs:SetDesc(text)
 end)
 
 
