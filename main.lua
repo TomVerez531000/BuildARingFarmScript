@@ -591,7 +591,7 @@ local AutoEggLogs = LogsTab:AddParagraph({
 	Title = "Auto egg",
 	Content = ""
 })
-local label = AutoSellLogs.DescLabel
+local label = AutoEggLogs.DescLabel
 label.RichText = true
 
 local egg_stats = {}
