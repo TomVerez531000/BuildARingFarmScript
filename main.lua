@@ -233,7 +233,7 @@ local function get_autoroll()
 			if table.find(AutoRoll.RarityFilter, dt.Rarity) then
 				game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("BuySeed"):FireServer(i)
 				table.insert(AutoRoll.Logs, dt)
-				AutoRoll.BoughtSeedSignal:Fire(dt)
+				AutoRoll.BoughtSeedSignal:Fire(plant, dt)
 			end
 		end
 	end)
@@ -615,7 +615,7 @@ autoegg.BoughtEggSignal:Connect(function(egg)
 		gradient.Parent = pet_labels[pet].Label
 		local stroke = Instance.new("UIStroke", pet_labels[pet].Label)
 		stroke.Color = Color3.fromRGB(0, 0, 0)
-		stroke.Thickness = 1
+		stroke.Thickness = 0.5
 		stroke.Transparency = 0
 	end
 	pet_labels[pet].Amount += 1
@@ -629,6 +629,39 @@ autoegg.BoughtEggSignal:Connect(function(egg)
 	end
 	final_text = final_text:sub(1, -3).."]"
 	pet_labels[pet].Label.Text = final_text
+end)
+
+
+local AutoRollLogs = LogsTab:AddParagraph({
+	Title = "Auto roll",
+	Content = ""
+})
+local AutoRollLogsLabel = AutoRollLogs.DescLabel
+AutoRollLogsLabel.RichText = true
+AutoRollLogsLabel.Visible = false
+
+local roll_labels = {}
+autoroll.BoughtSeedSignal:Connect(function(plant, plant_data)
+	local rarity = plants_data.Rarity
+
+	if not roll_labels[plant] then
+		roll_labels[plant] = {["Label"]=AutoRollLogsLabel:Clone(), ["Amount"]=0}
+		roll_labels[plant].Label.Parent = AutoRollLogsLabel.Parent
+		roll_labels[plant].Label.Visible = true
+
+		local rarity_dt = rarity_data[rarity]
+		roll_labels[plant].Label.LayoutOrder = rarity_dt.Order
+		local gradient = rarity_dt.Gradient:Clone()
+		gradient.Parent = roll_labels[plant].Label
+		local stroke = Instance.new("UIStroke", roll_labels[plant].Label)
+		stroke.Color = Color3.fromRGB(0, 0, 0)
+		stroke.Thickness = 0.5
+		stroke.Transparency = 0
+	end
+	
+	roll_labels[plant].Amount += 1
+	local final_text = "(x"..tostring(roll_labels[plant].Amount)..") "..plant.." ["..rarity.."]"
+	roll_labels[plant].Label.Text = final_text
 end)
 
 
