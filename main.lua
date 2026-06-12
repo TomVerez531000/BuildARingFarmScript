@@ -642,7 +642,7 @@ AutoRollLogsLabel.Visible = false
 
 local roll_labels = {}
 autoroll.BoughtSeedSignal:Connect(function(plant, plant_data)
-	local rarity = plants_data.Rarity
+	local rarity = plant_data.Rarity
 
 	if not roll_labels[plant] then
 		roll_labels[plant] = {["Label"]=AutoRollLogsLabel:Clone(), ["Amount"]=0}
