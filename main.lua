@@ -569,6 +569,11 @@ AutoRollSelector:OnChanged(function(Value)
 	autoroll.SetRarityFilter(Values)
 end)
 
+local AutoRollNoAnimToggle = AutoRollSection:AddToggle("AutoRollNoAnimToggle", {Title = "Disable roll animations", Default = false })
+AutoRollNoAnimToggle:OnChanged(function()
+	autoroll.ToggleAnimations(Options.AutoRollNoAnimToggle.Value)
+end)
+
 
 LogsTab = Window:AddTab({ Title = "Logs", Icon = "" })
 
