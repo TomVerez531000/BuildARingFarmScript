@@ -263,7 +263,7 @@ do
 				if table.find(AutoRoll.RarityFilter, dt.Rarity) or kind ~= "Normal" or mutation ~= nil then
 					game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("BuySeed"):FireServer(i)
 					table.insert(AutoRoll.Logs, dt)
-					AutoRoll.BoughtSeedSignal:Fire(plant, dt)
+					AutoRoll.BoughtSeedSignal:Fire(plant, dt, kind, mutation)
 				end
 			end
 		end)
@@ -681,7 +681,7 @@ do
 	AutoRollLogsLabel.Visible = false
 
 	local roll_labels = {}
-	autoroll.BoughtSeedSignal:Connect(function(plant, plant_data)
+	autoroll.BoughtSeedSignal:Connect(function(plant, plant_data, kind, mutation)
 		local rarity = plant_data.Rarity
 
 		if not roll_labels[plant] then
@@ -700,7 +700,7 @@ do
 		end
 		
 		roll_labels[plant].Amount += 1
-		local final_text = "(x"..tostring(roll_labels[plant].Amount)..") "..plant.." ["..rarity.."]"
+		local final_text = "(x"..tostring(roll_labels[plant].Amount)..") "..plant.." ["..rarity.."] - "..tostring(kind).." spin - "..(mutation or "No mutation")
 		roll_labels[plant].Label.Text = final_text
 	end)
 
