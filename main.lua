@@ -25,6 +25,7 @@ do
 	local pets_data = require(game.ReplicatedStorage.Shared.Registry.Pets)
 	local rarity_data = require(game.ReplicatedStorage.Shared.Registry.Rarities)
 	local gears_data = require(game.ReplicatedStorage.Shared.Registry.Gear)
+	local eggs_data = require(game.ReplicatedStorage.Shared.EggConfig)
 
 	local function get_autoegg()
 		local AutoEgg = {}
@@ -544,11 +545,17 @@ do
 	AutoEggToggle:OnChanged(function()
 		autoegg.Enable(Options.AutoEggToggle.Value)
 	end)
-
+	
+	local existing_buyable_eggs = {}
+	for egg,chance in pairs(eggs_data.RestockChances) do
+		if chance > 0 then
+			table.insert(existing_buyable_eggs, egg)
+		end
+	end
 	local AutoEggSelector = AutoEggSection:AddDropdown("AutoEggSelector", {
 		Title = "Buying eggs",
 		Description = "You can select a filter of wich egg to autobuy",
-		Values = {"CommonEgg","RareEgg","EpicEgg"},
+		Values = existing_buyable_eggs,
 		Multi = true,
 		Default = {},
 	})
