@@ -251,10 +251,16 @@ do
 
 		local animation_connections = getconnections(rollevent.OnClientEvent)
 
-		local connec = rollevent.OnClientEvent:Connect(function(got,animation)
-			for i,plant in pairs(got) do
+		local connec = rollevent.OnClientEvent:Connect(function(data)
+			local slots = data.Slots
+
+			for i,roll_data in pairs(slots) do
+				local plant = roll_data.Seed
+				local kind = roll_data.Kind
+				local mutation = roll_data.Mutation
+
 				local dt = data[plant]
-				if table.find(AutoRoll.RarityFilter, dt.Rarity) then
+				if table.find(AutoRoll.RarityFilter, dt.Rarity) or kind ~= "Normal" or mutation ~= nil then
 					game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("BuySeed"):FireServer(i)
 					table.insert(AutoRoll.Logs, dt)
 					AutoRoll.BoughtSeedSignal:Fire(plant, dt)
