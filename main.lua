@@ -247,7 +247,7 @@ do
 		}
 
 		local rollevent = game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("RollSeeds")
-		local data = require(game.ReplicatedStorage.Shared.Registry.Plants)
+		local plants_data = require(game.ReplicatedStorage.Shared.Registry.Plants)
 
 		local animation_connections = getconnections(rollevent.OnClientEvent)
 
@@ -259,7 +259,7 @@ do
 				local kind = roll_data.Kind
 				local mutation = roll_data.Mutation
 
-				local dt = data[plant]
+				local dt = plants_data[plant]
 				if table.find(AutoRoll.RarityFilter, dt.Rarity) or kind ~= "Normal" or mutation ~= nil then
 					game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("BuySeed"):FireServer(i)
 					table.insert(AutoRoll.Logs, dt)
